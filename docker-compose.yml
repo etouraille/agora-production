@@ -18,7 +18,7 @@ services:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.http.routers.neo.rule=Host(`neo.queel.fr`)"
-      - "traefik.http.routers.neo.port=7474"
+      - "traefik.tcp.services.neo.loadbalancer.server.port=7474"
       - "traefik.http.routers.neo.entrypoints=websecure"
   node:
     build: ./docker/node_api
@@ -35,9 +35,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.node.rule=Host(`api.queel.fr`)"
       - "traefik.http.routers.node.entrypoints=websecure"
-      - "traefik.http.routers.port=8000"
+      - "traefik.tcp.services.node.loadbalancer.server.port=8000"
       - "traefik.http.routers.ws.rule=Host(`ws.queel.fr`)"
-      - "traefik.http.routers.ws.port=8080"
+      - "traefik.tcp.services.ws.loadbalancer.server.port=8080"
       - "traefik.http.routers.ws.protocol=ws"
       - "traefik.http.routers.ws.entrypoints=websecure"
     depends_on:
@@ -60,7 +60,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.cdn.rule=Host(`cdn.queel.fr`)"
       - "traefik.http.routers.cdn.entrypoints=websecure"
-      - "traefik.http.routers.cdn.port=4000"
+
   elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
     environment:
@@ -86,7 +86,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=Host(`queel.fr`)"
       - "traefik.http.routers.front.entrypoints=websecure"
-      - "traefik.http.routers.front.port=80"
+
   nginx_admin:
     image: nginx
     volumes:
@@ -102,7 +102,6 @@ services:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.http.routers.admin.rule=Host(`admin.queel.fr`)"
-      - "traefik.http.routers.admin.port=80"
       - "traefik.http.routers.admin.entrypoints=websecure"
 
 
@@ -117,7 +116,6 @@ services:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.http.routers.mercure.rule=Host(`mercure.queel.fr`)"
-      - "traefik.http.routers.mercure.port=80"
       - "traefik.http.routers.mercure.entrypoints=websecure"
 
     command: /usr/bin/caddy run -config /src/Caddyfile
