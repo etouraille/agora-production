@@ -1,0 +1,121 @@
+version: "3.8"
+services:
+  neo:
+    image: neo4j:latest
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - ./neo/data:/data
+      - ./neo/log:/log
+      - ./neo/import:/var/lib/neo4j/import
+      - ./neo/plugins:/plugins
+    environment:
+      - NEO4J_AUTH=neo4j/b1otope
+    networks:
+      - web
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host(`neo.queel.fr`)"
+      - "traefik.basic.port=7474"
+  node:
+    build: ./docker/node_api
+    volumes:
+      - ./node:/src
+    tty: true
+    networks:
+      - web
+    ports:
+      - ":8000"
+      - ":8080"
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host(`api.queel.fr`)"
+      - "traefik.basic.port=8000"
+      - "traefik.ws.frontend.rule=Host(`ws.queel.fr`)"
+      - "traefik.ws.port=8080"
+      - "traefik.ws.protocol=ws"
+    depends_on:
+      - elastic
+      - neo
+    working_dir: /src
+  node_cdn:
+    build: ./docker/node
+    volumes:
+      - ./cdn:/src
+      - /../upload:/upload
+    tty: true
+    working_dir: /src
+    networks:
+      - web
+    ports:
+      - ":4000"
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host(`cdn.queel.fr`)"
+      - "traefik.basic.port=4000"
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    environment:
+      - discovery.type=single-node
+      - xpack.ml.enabled=false
+    volumes:
+      - ./elastic:/usr/share/elasticsearch/data
+    networks:
+      - web
+  nginx:
+    image: nginx
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./build:/src
+    tty: true
+    working_dir: /src
+    networks:
+      - web
+    ports:
+      - ":80"
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host(`queel.fr`)"
+      - "traefik.basic.port=80"
+  nginx_admin:
+    image: nginx
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      - ./admin:/src
+    tty: true
+    working_dir: /src
+    networks:
+      - web
+    ports:
+      - ":80"
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host(`admin.queel.fr`)"
+      - "traefik.basic.port=80"
+
+  mercure:
+    image: dunglas/mercure
+    tty: true
+    networks:
+      - web
+    volumes:
+      - ./mercure:/src
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host(`mercure.queel.fr`)"
+      - "traefik.basic.port=80"
+    command: /usr/bin/caddy run -config /src/Caddyfile
+
+
+networks:
+  web:
+    external: true
+
+
