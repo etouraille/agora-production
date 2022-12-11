@@ -38,7 +38,7 @@ services:
       - "traefik.tcp.services.node.loadbalancer.server.port=8000"
       - "traefik.http.routers.ws.rule=Host(`ws.queel.fr`)"
       - "traefik.tcp.services.ws.loadbalancer.server.port=8080"
-      - "traefik.http.routers.ws.protocol=ws"
+      # - "traefik.http.routers.ws.protocol=ws"
       - "traefik.http.routers.ws.entrypoints=websecure"
     depends_on:
       - elastic
@@ -58,8 +58,8 @@ services:
     labels:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
-      - "traefik.http.routers.cdn.rule=Host(`cdn.queel.fr`)"
-      - "traefik.http.routers.cdn.entrypoints=websecure"
+      - "traefik.http.routers.cdn1.rule=Host(`cdn.queel.fr`)"
+      - "traefik.http.routers.cdn1.entrypoints=websecure"
 
   elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
