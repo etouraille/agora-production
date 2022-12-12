@@ -40,7 +40,7 @@ services:
       - "traefik.tcp.services.ws.loadbalancer.server.port=8080"
       - "traefik.http.routers.ws.tls=true"
       - "traefik.http.routers.ws.tls.certresolver=dns"
-      - "traefik.http.routers.ws.entrypoints=ws"
+      - "traefik.http.routers.ws.entrypoints=wss"
     depends_on:
       - elastic
       - neo
