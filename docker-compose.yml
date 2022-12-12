@@ -41,7 +41,6 @@ services:
       - "traefik.http.routers.ws.tls=true"
       - "traefik.http.routers.ws.entrypoints=wss"
 
-
     depends_on:
       - elastic
       - neo
