@@ -38,8 +38,9 @@ services:
       - "traefik.tcp.services.node.loadbalancer.server.port=8000"
       - "traefik.http.routers.ws.rule=Host(`ws.${HOST}`)"
       - "traefik.tcp.services.ws.loadbalancer.server.port=8080"
-      # - "traefik.http.routers.ws.protocol=ws"
-      - "traefik.http.routers.ws.entrypoints=websecure"
+      - "traefik.http.routers.ws.tls=true"
+      - "traefik.http.routers.ws.tls.certresolver=dns"
+      - "traefik.http.routers.ws.entrypoints=wss"
     depends_on:
       - elastic
       - neo
