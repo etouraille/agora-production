@@ -31,6 +31,7 @@ services:
       - ":8000"
       - ":8080"
     labels:
+      - "traefik.docker.lbswarm=true"
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.http.routers.node.rule=Host(`api.${HOST}`)"
