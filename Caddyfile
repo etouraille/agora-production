@@ -1,0 +1,16 @@
+{
+   debug
+   auto_https off
+}
+:80
+route {
+    mercure {
+        publisher_jwt {$PUBLISHER_JWT}
+        subscriber_jwt {$SUBSCRIBER_JWT}
+        publish_origins ${PUBLISH_ORIGINS}
+        cors_origins ${CORS_ORIGINS}
+
+    }
+
+    respond "Not Found" 404
+}
