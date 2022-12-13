@@ -39,7 +39,7 @@ services:
       - "traefik.http.routers.ws.rule=Host(`ws.${HOST}`)"
       - "traefik.tcp.services.ws.loadbalancer.server.port=8081"
       - "traefik.http.routers.ws.tls=true"
-      - "traefik.http.routers.ws.entrypoints=ws"
+      - "traefik.http.routers.ws.entrypoints=wss"
 
 
     depends_on:
