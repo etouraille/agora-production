@@ -44,7 +44,7 @@ services:
       - neo
     working_dir: /src
   socket:
-    build: ./docker/node_api
+    build: ./docker/socket
     volumes:
       - ./node:/src
     tty: true
