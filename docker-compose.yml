@@ -29,22 +29,25 @@ services:
     networks:
       - web
     ports:
-      - ":8000"
-      - ":8081"
+      - "8000:8000"
+      - "8081:8081"
     container_name: api-agora
     labels:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.http.routers.node.rule=Host(`api.${HOST}`)"
+        #- "traefik.http.routers.node.service=node"
       - "traefik.http.routers.node.entrypoints=websecure"
       - "traefik.tcp.services.node.loadbalancer.server.port=8000"
-      - "traefik.http.routers.wss.rule=Host(`ws.${HOST}`)"
-      - "traefik.tcp.services.wss.loadbalancer.server.port=8081"
+      - "traefik.http.routers.socket.rule=Host(`ws.${HOST}`)"
+      - "traefik.http.routers.socket.service=socket"
+      - "traefik.tcp.services.socket.loadbalancer.server.port=8081"
+        #- "traefik.tcp.services.wss.loadbalancer.server.scheme=wss"
         #- "traefik.http.services.wss.loadBalancer.sticky.cookie=true"
-      - "traefik.http.routers.wss.tls=true"
-      - "traefik.http.routers.wss.tls.certresolver=default"
-      - "traefik.http.routers.wss.entrypoints=wss"
-      - "traefik.http.middlewares.wss.headers.customrequestheaders.X-Forwarded-Proto=https"
+        #- "traefik.http.routers.wss.tls=true"
+        #- "traefik.http.routers.wss.tls.certresolver=default"
+      - "traefik.http.routers.socket.entrypoints=websecure"
+      - "traefik.http.middlewares.socket.headers.customrequestheaders.X-Forwarded-Proto=https,wss"
         #- "traefik.http.routers.wss.tls.certresolver=default"
     depends_on:
       - elastic
