@@ -36,11 +36,14 @@ services:
       - "traefik.http.routers.node.rule=Host(`api.${HOST}`)"
       - "traefik.http.routers.node.entrypoints=websecure"
       - "traefik.tcp.services.node.loadbalancer.server.port=8000"
-      - "traefik.http.routers.ws.rule=Host(`ws.${HOST}`)"
-      - "traefik.tcp.services.ws.loadbalancer.server.port=8081"
-      - "traefik.http.routers.ws.tls=true"
-      - "traefik.http.routers.ws.entrypoints=wss"
-
+      - "traefik.http.routers.wss.rule=Host(`ws.${HOST}`)"
+      - "traefik.tcp.services.wss.loadbalancer.server.port=8081"
+        #- "traefik.http.services.wss.loadBalancer.sticky.cookie=true"
+        # - "traefik.http.routers.wss.tls=true"
+        #- "traefik.http.routers.wss.tls.certResolver=default"
+      - "traefik.http.routers.wss.entrypoints=wss"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+        #- "traefik.http.routers.wss.tls.certresolver=default"
     depends_on:
       - elastic
       - neo
@@ -129,6 +132,7 @@ services:
 
 networks:
   web:
-    external: true
+    external:
+      name: web
 
 
