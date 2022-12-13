@@ -57,15 +57,15 @@ services:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
       - "traefik.http.routers.socket.rule=Host(`ws.${HOST}`)"
-      - "traefik.http.routers.socket.service=socket"
+        #- "traefik.http.routers.socket.service=socket"
       - "traefik.tcp.services.socket.loadbalancer.server.port=8081"
-        #- "traefik.tcp.services.wss.loadbalancer.server.scheme=wss"
+        #- "traefik.tcp.services.socket.loadbalancer.server.scheme=wss"
         #- "traefik.http.services.wss.loadBalancer.sticky.cookie=true"
-      #- "traefik.http.routers.wss.tls=true"
-      #- "traefik.http.routers.wss.tls.certresolver=default"
+      # - "traefik.http.routers.socket.tls=true"
+      # - "traefik.http.routers.wss.tls.certresolver=default"
       - "traefik.http.routers.socket.entrypoints=websecure"
-      - "traefik.http.middlewares.socket.headers.customrequestheaders.X-Forwarded-Proto=https,wss"
-      #- "traefik.http.routers.wss.tls.certresolver=default"
+      - "traefik.http.middlewares.socket.headers.customrequestheaders.X-Forwarded-Proto=https"
+        # - "traefik.http.routers.socket.tls.certresolver=default"
     depends_on:
       - elastic
       - neo
