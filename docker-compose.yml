@@ -64,7 +64,7 @@ services:
       # - "traefik.http.routers.socket.tls=true"
       # - "traefik.http.routers.wss.tls.certresolver=default"
       - "traefik.http.routers.socket.entrypoints=websecure"
-      - "traefik.http.middlewares.socket.headers.customrequestheaders.X-Forwarded-Proto=https"
+        # - "traefik.http.middlewares.socket.headers.customrequestheaders.X-Forwarded-Proto=https"
         # - "traefik.http.routers.socket.tls.certresolver=default"
     depends_on:
       - elastic
