@@ -1,29 +1,38 @@
-debug = false
-
-logLevel = "ERROR"
-defaultEntryPoints = ["https","http"]
-
+[accessLog]
+[api]
+    dashboard = true
+    insecure = true
+[logs]
+    level = 'ERROR'
 [entryPoints]
-[entryPoints.http]
-address = ":80"
-[entryPoints.http.redirect]
-entryPoint = "https"
-[entryPoints.https]
-address = ":443"
-[entryPoints.https.tls]
+[entryPoints.web]
+    address = ":80"
+    [entryPoints.web.http]
+    [entryPoints.web.http.redirections]
+        [entryPoints.web.http.redirections.entryPoint]
+        to = "websecure"
+        scheme = "https"
+        permanent = true
 
-[retry]
+[entryPoints.websecure]
+    address = ":443"
+    [entryPoints.websecure.http.tls]
+        certResolver = "default"
+[entryPoints.wss]
+    address = ":8001"
 
-[docker]
-endpoint = "unix:///var/run/docker.sock"
-domain = "queel.fr"
-watch = true
-exposedByDefault = false
 
-[acme]
-email = "edouard.touraille@gmail.com"
-storage = "acme.json"
-entryPoint = "https"
-onHostRule = true
-[acme.httpChallenge]
-entryPoint = "http"
+[providers]
+    [providers.docker]
+        watch = true
+        exposedByDefault = false
+        network = "web"
+
+[certificatesResolvers]
+    [certificatesResolvers.default]
+        [certificatesResolvers.default.acme]
+            email = "contact@queel.io"
+            storage = "acme.json"
+            caServer = "https://acme-v01.api.letsencrypt.org/directory"
+            [certificatesResolvers.default.acme.tlsChallenge]
+
