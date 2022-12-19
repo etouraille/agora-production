@@ -150,6 +150,12 @@ services:
       - PUBLISH_ORIGINS=${MERCURE_PUBLISH_ORIGINS}
       - CORS_ORIGINS=${MERCURE_ORIGINS}
 
+  mongo:
+    image: mongo:4.4.0
+    ports:
+      - ":27017"
+    container_name: mongo-agora
+
 
 networks:
   web:
