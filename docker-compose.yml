@@ -155,11 +155,13 @@ services:
     ports:
       - ":27017"
     container_name: mongo-agora
+    networks:
+      - web
 
 
 networks:
   web:
-    external:
-      name: web
+    external: true
+
 
 
