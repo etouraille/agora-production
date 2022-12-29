@@ -21,6 +21,21 @@ services:
       - "traefik.http.routers.neo.rule=Host(`neo.${HOST}`)"
       - "traefik.tcp.services.neo.loadbalancer.server.port=7474"
       - "traefik.http.routers.neo.entrypoints=websecure"
+  ssr:
+    image: node:latest
+    container_name: ssr-agora
+    volumes:
+      - ./ssr:/src
+    tty: true
+    working_dir: /src
+    networks:
+      - web
+    labels:
+        - "traefik.docker.network=web"
+        - "traefik.enable=true"
+        - "traefik.http.routers.ssr.rule=Headers(`From`, `googlebot(at)googlebot.com`)"
+        - "traefik.http.routers.ssr.entrypoints=websecure"
+        - "traefik.http.routers.ssr.loadbalancer.server.port=8090"
   node:
     build: ./docker/node_api
     volumes:
