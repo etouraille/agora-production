@@ -158,7 +158,7 @@ services:
       - "traefik.http.routers.mercure.rule=Host(`mercure.${HOST}`)"
       - "traefik.http.routers.mercure.entrypoints=websecure"
 
-    command: /usr/bin/caddy run -config /src/Caddyfile
+    command: /usr/bin/caddy run --adapter caddyfile -config /src/Caddyfile
     environment:
       - PUBLISHER_JWT=${PUBLISHER_JWT}
       - SUBSCRIBER_JWT=${SUBSCRIBER_JWT}
